@@ -2,8 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const app = express();
+require("dotenv").config();
 const route = require("./Route/route");
-mongoose.connect("mongodb://localhost/blogs", {
+mongoose.connect(process.env.mongo_url, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -20,6 +21,6 @@ app.use(bodyParser.json());
 
 app.use(route);
 
-app.listen(8080, () => {
+app.listen(process.env.port, (req, res) => {
   console.log("server is running on port 8080");
 });
