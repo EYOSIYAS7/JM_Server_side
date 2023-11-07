@@ -1,8 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 const app = express();
-
-mongoose.connect("mongodb://localhost/joymakersData", {
+const route = require("./Route/route");
+mongoose.connect("mongodb://localhost/blogs", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -14,6 +15,11 @@ mongoose.connection.on("err", (err) => {
   console.log(err);
 });
 
-app.listen(5000, () => {
-  console.log("server is running on port 5000");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+app.use(route);
+
+app.listen(8080, () => {
+  console.log("server is running on port 8080");
 });

@@ -6,6 +6,9 @@ const blogSchema = new Schema(
     title: {
       type: "string",
     },
+    image: {
+      type: "string",
+    },
     description: {
       type: "string",
     },
