@@ -2,13 +2,22 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const multer = require("multer");
+const gridFsStorage = require("multer-gridfs-storage");
+const grid = require("gridfs-stream");
+
 const app = express();
 require("dotenv").config();
 const route = require("./Route/route");
-mongoose.connect(process.env.mongo_url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+
+const conn = mongoose.createConnection(process.env.mongo_url);
+
+let gfs;
+conn.once("open", () => {
+  gfs = grid(conn.db, mongoose.mongo);
+  gfs.collection("blogs");
 });
+
 mongoose.connection.on("connected", () => {
   console.log("successfully connected to db");
 });
