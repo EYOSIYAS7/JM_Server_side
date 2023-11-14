@@ -44,8 +44,15 @@ mongoose.connection.on("connected", () => {
   console.log("successfully connected to db");
 });
 const uploadBlogs = multer({ storage });
-app.post("/upload", uploadBlogs.single("file"), (req, res) => {
-  res.json({ file: req.body });
+app.post("/upload", uploadBlogs.single("file"), async (req, res) => {
+  return res.json({ message: "file saved " });
+});
+
+// it needs to wait until the fetch is completed thats why im using async/await
+app.get("/files", async (req, res) => {
+  const file = await gfs.files.find().toArray();
+
+  return res.json(file);
 });
 
 mongoose.connection.on("err", (err) => {
