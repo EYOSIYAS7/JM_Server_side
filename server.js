@@ -50,11 +50,31 @@ app.post("/upload", uploadBlogs.single("file"), async (req, res) => {
 
 // it needs to wait until the fetch is completed thats why im using async/await
 app.get("/files", async (req, res) => {
-  const file = await gfs.files.find().toArray();
-
+  const files = await gfs.files.find().toArray();
+  // res.redirect("/");
+  return res.json(files);
+});
+// to get a single image file data
+app.get("/file/:filename", async (req, res) => {
+  const file = await gfs.files.findOne({ filename: req.params.filename });
+  if (!file) {
+    return res.json({ err: "File doesn't exist" });
+  }
   return res.json(file);
 });
+// to Display the image
+app.get("/image/:filename", async (req, res) => {
+  const image = await gfs.files.findOne({ filename: req.params.filename });
 
+  if (!image) {
+    return res.json({ err: "File doesn't exist" });
+  }
+  if (image.contentType === "image/jpeg" || image.contentType === "image/png") {
+    gfs.createReadStream(image.filename).pipe(res);
+  } else {
+    return res.json({ file: image.filename });
+  }
+});
 mongoose.connection.on("err", (err) => {
   console.log(err);
 });
