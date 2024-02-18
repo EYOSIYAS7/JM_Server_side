@@ -5,7 +5,7 @@ const route = express.Router();
 
 const controller = require("../Controller/handler");
 
-route.post("/newblog", controller.addblog);
-route.get("/see/:id", controller.Findone);
+route.post("/newblog", controller.addBlog);
+route.get("/see/:id", controller.FindOne);
 
 module.exports = route;
